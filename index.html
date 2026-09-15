@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Music Player</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://kit.fontawesome.com/f26cc441bb.js" 
+        crossorigin="anonymous"></script>
+    </head>
+    <body>
+
+       <div class="container">
+            <div class="music-player">
+                <nav>
+                    <div class="circle">
+                        <i class="fa-solid fa-angle-left"></i>
+                    </div>
+                    <div class="circle">
+                       <i class="fa-solid fa-bars"></i> 
+                    </div>
+                </nav>
+                <img src="https://i.pinimg.com/736x/33/f3/a7/33f3a796fc3f26330f1c785279947768.jpg" 
+                class="song-img">
+                <h1>505</h1>
+                <p>Arctic Monkeys</p>
+
+                <audio id="song">
+                    <source src="Arctic Monkeys - 505 (lyrics).mp3" type="audio/mpeg">
+                </audio>
+                <input type="range" value="0" id="progress">
+
+                <div class="controls">
+                    <div id="backward" onclick="skipBackward()"><i class="fa-solid fa-backward"></i></div>
+                    <div onclick="playPause()">
+                        <i class="fa-solid fa-play" id="ctrlIcon"></i></div>
+                    <div id="forward" onclick="skipForward()"><i class="fa-solid fa-forward"></i></div>
+                </div>
+
+            </div>
+       </div>
+
+       
+    <script>
+        let progress = document.getElementById("progress");
+        let song = document.getElementById("song");
+        let ctrlIcon = document.getElementById("ctrlIcon"); // CORREÇÃO: Deve ser exatamente o ID usado no HTML
+
+        // Define os valores máximos da barra ao carregar a música
+        song.onloadedmetadata = function(){
+            progress.max = song.duration;
+            progress.value = song.currentTime;
+        }
+
+        
+        function playPause(){
+            let player = document.querySelector(".music-player");
+
+            if(song.paused){
+                song.play();
+                player.classList.add("playing");
+                ctrlIcon.classList.remove("fa-play");
+                ctrlIcon.classList.add("fa-pause");
+            }
+            else{
+                song.pause();
+                player.classList.remove("playing");
+                ctrlIcon.classList.remove("fa-pause");
+                ctrlIcon.classList.add("fa-play");
+            }
+    }
+
+
+    setInterval(()=>{
+            progress.value = song.currentTime;
+            }, 500);
+
+        function skipBackward(){
+            if (!isNaN(song.duration)) {
+                song.currentTime = Math.max(0, song.currentTime - 10);
+                progress.value = song.currentTime;
+            }
+        }
+
+        function skipForward(){
+            if (!isNaN(song.duration)) {
+                song.currentTime = Math.min(song.duration, song.currentTime + 10);
+                progress.value = song.currentTime;
+            }
+        }
+
+        progress.onchange = function(){
+            song.play();
+            song.currentTime = progress.value;
+            ctrlIcon.classList.add("fa-pause");
+            ctrlIcon.classList.remove("fa-play");
+        }
+        
+    </script>
+        
+    </body>
+</html>
